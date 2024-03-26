@@ -1,5 +1,6 @@
 package com.example.myloginpage
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -28,9 +29,16 @@ class SingUpActivity : AppCompatActivity() {
             val userId = editId.text.toString()
             val userPw = editPw.text.toString()
             if (userName.isNotEmpty() && userId.isNotEmpty() && userPw.isNotEmpty()) {
-//                val user = UserData(name = userName, id = userId, pw = userPw) -> 이렇게한다면, 해당 화면이 종료되고 다시 불러올때 초기화되기에 날라감. 외부에 저장하는 방법으로 바꿀것.
-//                dataManager.addUser(user)
+                /*
+                val user = UserData(name = userName, id = userId, pw = userPw) -> 이렇게한다면, 해당 화면이 종료되고 다시 불러올때 초기화되기에 날라감. 외부에 저장하는 방법으로 바꿀것. 이 방식으로 할려면 중간에 파일을 강제적으로 저장해야함. 좋은접근법은 아닌것으로 보임.
+                메모장 파일명을 id로 중복체크를 시도, 로그인시 해당파일에 접근하여 비교가능한지?
+                dataManager.addUser(user)
+                */
                 count = 0
+                val intent = Intent (this, SingInActivity::class.java)
+                intent.putExtra("id", userId)
+                intent.putExtra("pw", userPw)
+                setResult(RESULT_OK,intent)
                 finish()
             } else { //그만!
                 when (count) {
