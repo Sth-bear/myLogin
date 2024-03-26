@@ -31,14 +31,14 @@ class SingUpActivity : AppCompatActivity() {
             val userId = editId.text.toString()
             val userPw = editPw.text.toString()
             if (userName.isNotEmpty() && userId.isNotEmpty() && userPw.isNotEmpty()) {
-                if(db.UserDao()?.getUser()?.contains(userId) == true) {
+                if(db.UserDao()?.getUser()?.contains(userId) == true) { //id가 이미 있다면? 가입되었다고 출력
                     Toast.makeText(this, "이미 가입된 계정입니다.", Toast.LENGTH_SHORT).show()
                 } else {
-                    db.UserDao()?.insert(User(id = userId, pw = userPw, name = userName))
+                    db.UserDao()?.insert(User(id = userId, pw = userPw, name = userName)) //신규 사용자 등록
                     val intent = Intent(this, SingInActivity::class.java)
                     intent.putExtra("id", userId)
                     intent.putExtra("pw", userPw)
-                    setResult(RESULT_OK, intent)
+                    setResult(RESULT_OK, intent)//결과값 콜백
                     finish()
                 }
             } else { //그만!
@@ -46,7 +46,7 @@ class SingUpActivity : AppCompatActivity() {
                     in 3..4 -> {
                         val test =
                             layoutInflater.inflate(R.layout.test_toast, findViewById(R.id.test1))
-                        val testToast = Toast(applicationContext) //toast에 임의적으로 그림을 할당. text는 비어있더라도 반드시 있어야했음.
+                        val testToast = Toast(applicationContext) //toast에 임의로으로 그림을 할당. text는 반드시 필요함.
                         testToast.view = test
                         testToast.show()
                         count++

@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase
 abstract class AppDatabase : RoomDatabase(){
     abstract fun UserDao(): UserDao?
 
-    companion object {
+    companion object {  //객체 생성에 많은 비용이 듦. 싱글톤으로 구성
         private var INSTANCE: AppDatabase? = null
         fun getDBInstance(context: Context): AppDatabase? {
             if(INSTANCE == null) {

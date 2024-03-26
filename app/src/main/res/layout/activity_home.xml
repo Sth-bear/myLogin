@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/user_img" />
+        android:src ="@drawable/user_img1" />
 
     <TextView
         android:id="@+id/tv_id"

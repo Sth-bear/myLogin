@@ -22,7 +22,7 @@ class SingInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        db = AppDatabase.getDBInstance(this)!!
+        db = AppDatabase.getDBInstance(this)!! //db연결
 
         val idEdit = findViewById<EditText>(R.id.ed_id)
         val pwEdit = findViewById<EditText>(R.id.ed_pw)
@@ -43,7 +43,7 @@ class SingInActivity : AppCompatActivity() {
             }
         }
 
-        pwEdit.addTextChangedListener(object :TextWatcher {
+        pwEdit.addTextChangedListener(object :TextWatcher { //작성시 마다 상태가 변하도록 / 쓰기전, 쓰는중, 쓰고난후
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
@@ -57,15 +57,15 @@ class SingInActivity : AppCompatActivity() {
             val idData = idEdit.text.toString()
             val pwData = pwEdit.text.toString()
 
-            if(db.UserDao()?.getUser()?.contains(idData) == true) {
-                if (db.UserDao()?.getPasswordById(idData) == pwData) {
-                    val userName = db.UserDao()?.getNameById(idData)
+            if(db.UserDao()?.getUser()?.contains(idData) == true) { // id 가 data에 있는지?
+                if (db.UserDao()?.getPasswordById(idData) == pwData) { // id에 할당된 pw가 맞는지?
+                    val userName = db.UserDao()?.getNameById(idData) // id 에 할당된 이름을 가져옴
                     val intent = Intent(this, HomeActivity::class.java)
-                    intent.putExtra("loginId", idData)
+                    intent.putExtra("loginId", idData) //id와 이름을 intent로 넘김
                     intent.putExtra("loginName", userName)
                     startActivity(intent)
                 } else {
-                    Toast.makeText(this, "ID 또는 PW를 확인해주세요.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "ID 또는 PW를 확인해주세요.", Toast.LENGTH_SHORT).show()//둘중 뭐가 문제인지 모르게 같은 toast를 출력
                 }
             } else {
                 Toast.makeText(this, "ID 또는 PW를 확인해주세요.", Toast.LENGTH_SHORT).show()

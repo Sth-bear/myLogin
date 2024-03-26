@@ -9,6 +9,9 @@ interface UserDao {
     @Query("SELECT id FROM user")
     fun getUser(): List<String> //전체 아이디 리스트를 가져와 중복체크
 
+    @Query("SELECT userIndex FROM user WHERE id = :id")
+    fun getIndexById(id:String): Int
+
     @Query("SELECT pw FROM user WHERE id = :id") //해당 id에 할당된 pw검사
     fun getPasswordById(id:String):String
 
