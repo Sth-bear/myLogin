@@ -14,9 +14,13 @@ class HomeActivity : AppCompatActivity() {
 
         val btnQuit = findViewById<Button>(R.id.btn_quit)
         val loginId = intent.getStringExtra("loginId")
+        val loginName = intent.getStringExtra("loginName")
 
         val userId = findViewById<TextView>(R.id.tv_id)
         userId.text = loginId
+
+        val userName = findViewById<TextView>(R.id.tv_name)
+        userName.text = loginName
 
         btnQuit.setOnClickListener {
             finish()

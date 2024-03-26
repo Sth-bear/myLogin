@@ -9,5 +9,7 @@
     <string name="login">로그인</string>
     <string name="create">회원가입</string>
     <string name="quit">종료</string>
+    <string name="age">나이</string>
+    <string name="mbti">mbti</string>
     <string name="error_create">입력되지 않은 정보가 있습니다.</string>
 </resources>

@@ -10,15 +10,19 @@ import android.widget.Button
 import android.widget.EditText
 import android.app.AlertDialog
 import android.content.Context
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 
 
 class SingInActivity : AppCompatActivity() {
     lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+    lateinit var db: AppDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        db = AppDatabase.getDBInstance(this)!!
 
         val idEdit = findViewById<EditText>(R.id.ed_id)
         val pwEdit = findViewById<EditText>(R.id.ed_pw)
@@ -53,9 +57,19 @@ class SingInActivity : AppCompatActivity() {
             val idData = idEdit.text.toString()
             val pwData = pwEdit.text.toString()
 
-            val intent = Intent(this,HomeActivity::class.java)
-            intent.putExtra("loginId",idData)
-            startActivity(intent)
+            if(db.UserDao()?.getUser()?.contains(idData) == true) {
+                if (db.UserDao()?.getPasswordById(idData) == pwData) {
+                    val userName = db.UserDao()?.getNameById(idData)
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.putExtra("loginId", idData)
+                    intent.putExtra("loginName", userName)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, "ID 또는 PW를 확인해주세요.", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, "ID 또는 PW를 확인해주세요.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         btnCreate.setOnClickListener {//회원가입으로

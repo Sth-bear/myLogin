@@ -13,33 +13,34 @@ import kotlinx.coroutines.runBlocking
 
 
 class SingUpActivity : AppCompatActivity() {
+    lateinit var db: AppDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sing_up)
 
-        val dataManager = DataManager(this)
         val editName = findViewById<EditText>(R.id.edit_name)
         val editId = findViewById<EditText>(R.id.edit_id)
         val editPw = findViewById<EditText>(R.id.edit_pw)
         val btnCreate = findViewById<Button>(R.id.btn_create)
         var count: Int = 0
 
+        db = AppDatabase.getDBInstance(this.applicationContext)!!
+
         btnCreate.setOnClickListener {
             val userName = editName.text.toString()
             val userId = editId.text.toString()
             val userPw = editPw.text.toString()
             if (userName.isNotEmpty() && userId.isNotEmpty() && userPw.isNotEmpty()) {
-                /*
-                val user = UserData(name = userName, id = userId, pw = userPw) -> 이렇게한다면, 해당 화면이 종료되고 다시 불러올때 초기화되기에 날라감. 외부에 저장하는 방법으로 바꿀것. 이 방식으로 할려면 중간에 파일을 강제적으로 저장해야함. 좋은접근법은 아닌것으로 보임.
-                메모장 파일명을 id로 중복체크를 시도, 로그인시 해당파일에 접근하여 비교가능한지?
-                dataManager.addUser(user)
-                */
-                count = 0
-                val intent = Intent (this, SingInActivity::class.java)
-                intent.putExtra("id", userId)
-                intent.putExtra("pw", userPw)
-                setResult(RESULT_OK,intent)
-                finish()
+                if(db.UserDao()?.getUser()?.contains(userId) == true) {
+                    Toast.makeText(this, "이미 가입된 계정입니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    db.UserDao()?.insert(User(id = userId, pw = userPw, name = userName))
+                    val intent = Intent(this, SingInActivity::class.java)
+                    intent.putExtra("id", userId)
+                    intent.putExtra("pw", userPw)
+                    setResult(RESULT_OK, intent)
+                    finish()
+                }
             } else { //그만!
                 when (count) {
                     in 3..4 -> {
