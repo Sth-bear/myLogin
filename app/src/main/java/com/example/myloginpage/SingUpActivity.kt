@@ -13,7 +13,7 @@ import kotlinx.coroutines.runBlocking
 
 
 class SingUpActivity : AppCompatActivity() {
-    lateinit var db: AppDatabase
+    private lateinit var db: AppDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sing_up)
@@ -30,11 +30,11 @@ class SingUpActivity : AppCompatActivity() {
             val userName = editName.text.toString()
             val userId = editId.text.toString()
             val userPw = editPw.text.toString()
-            if (userName.isNotEmpty() && userId.isNotEmpty() && userPw.isNotEmpty()) {
-                if(db.UserDao()?.getUser()?.contains(userId) == true) { //id가 이미 있다면? 가입되었다고 출력
+            if (userName.isNotBlank() && userId.isNotBlank() && userPw.isNotBlank()) { // isNotEmpty() -> isNotBlank 비어있는 값이 필요한 경우도 있음 -> 입력값없음과 null은 다른것.
+                if(db.userDao().getUser().contains(userId)) { //id가 이미 있다면? 가입되었다고 출력
                     Toast.makeText(this, "이미 가입된 계정입니다.", Toast.LENGTH_SHORT).show()
                 } else {
-                    db.UserDao()?.insert(User(id = userId, pw = userPw, name = userName)) //신규 사용자 등록
+                    db.userDao().insert(User(id = userId, pw = userPw, name = userName)) //신규 사용자 등록
                     val intent = Intent(this, SingInActivity::class.java)
                     intent.putExtra("id", userId)
                     intent.putExtra("pw", userPw)
@@ -46,8 +46,8 @@ class SingUpActivity : AppCompatActivity() {
                     in 3..4 -> {
                         val test =
                             layoutInflater.inflate(R.layout.test_toast, findViewById(R.id.test1))
-                        val testToast = Toast(applicationContext) //toast에 임의로으로 그림을 할당. text는 반드시 필요함.
-                        testToast.view = test
+                        val testToast = Toast(applicationContext) //toast에 임의로으로 그림을 할당. text는 반드시 필요함. + toast의 아이콘은 manifest의 라운드아이콘을 따라감. 앱아아콘과 동일시됨.
+                        testToast.view = test                       //즉, 아이콘만 변경하고 싶다면 여기서 매니패스트를 건드는 방식을 하면 가능해보임
                         testToast.show()
                         count++
                     }
@@ -57,7 +57,6 @@ class SingUpActivity : AppCompatActivity() {
                         val testToast = Toast(applicationContext)
                         testToast.view = test
                         testToast.show()
-                        count = 0
                         Handler(Looper.getMainLooper()).postDelayed({
                             moveTaskToBack(true)
                             finishAndRemoveTask()
